@@ -1,0 +1,17 @@
+version: "3"
+services:
+  digdag:
+    build: .
+    container_name: digdag_ecs
+    ports:
+      - "5000:65432"
+    depends_on:
+      - postgresql
+  postgresql:
+    image: postgres:11
+    container_name: postgres_ecs
+    volumes:
+      - ./fixtures/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
