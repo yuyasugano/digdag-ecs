@@ -1,0 +1,8 @@
+timezone: Asia/Tokyo
+
++my_task:
+  py>: python_tasks.my_task
+
++version:
+  py>: python_tasks.version
+

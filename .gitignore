@@ -1,4 +1,6 @@
+docker-compose.yml
 /.digdag-wrapper
 .digdag
 *.pyc
-
+*.swp
+*.bak

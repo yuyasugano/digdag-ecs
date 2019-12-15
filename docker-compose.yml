@@ -7,6 +7,12 @@ services:
       - "5000:65432"
     depends_on:
       - postgresql
+    environment:
+      ENVRONMENT: develop
+      AWS_ACCESS_KEY:
+      AWS_SECRET_KEY:
+      AWS_S3_EXAMPLE_BUCKET:
+      AWS_S3_EXAMPLE_PATH:
   postgresql:
     image: postgres:11
     container_name: postgres_ecs

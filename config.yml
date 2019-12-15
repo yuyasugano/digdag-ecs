@@ -1,0 +1,6 @@
+aws:
+  access_key: ${AWS_ACCESS_KEY}
+  secret_key: ${AWS_SECRET_KEY}
+  s3_example_bucket: ${AWS_S3_EXAMPLE_BUCKET}
+  s3_example_path: ${AWS_S3_EXAMPLE_PATH}
+env: ${ENVIRONMENT}
