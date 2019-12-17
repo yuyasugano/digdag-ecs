@@ -3,8 +3,8 @@ FROM openjdk:8-alpine
 ENV DIGDAG_VERSION=0.9.39 \
     EMBULK_VERSION=0.9.18 \
     AWSCLI_VERSION=1.16.139 \
-    BIND=0.0.0.0 \
-    PORT=65432
+    SERVER_BIND=0.0.0.0 \
+    SERVER_PORT=65432
 
 WORKDIR /var/lib/digdag
 
@@ -12,7 +12,8 @@ COPY server.properties /etc/server.properties
 COPY config.yml /var/lib/digdag/config.yml
 COPY Gemfile Gemfile.lock ./
 COPY config.yml ./
-COPY python ./
+COPY *.dig ./
+COPY *.py ./
 
 RUN apk add --no-cache curl gcc g++ libc-dev linux-headers && \
     curl -o /usr/bin/digdag --create-dirs -L "https://dl.digdag.io/digdag-$DIGDAG_VERSION" && \
@@ -39,11 +40,25 @@ RUN pip3 install -r ./requirements.txt
 USER digdag
 WORKDIR /var/lib/digdag
 
+ENV DB_TYPE=postgresql \
+    DB_USER=digdag \
+    DB_PASSWORD=digdag \
+    DB_HOST=postgresql \
+    DB_PORT=5432 \
+    DB_NAME=digdag
+
 EXPOSE 65432
-CMD exec digdag server --bind $BIND \
-                       --port $PORT \
+CMD exec digdag server --bind $SERVER_BIND \
+                       --port $SERVER_PORT \
                        --config /etc/server.properties \
                        --params-file /var/lib/digdag/config.yml \
                        --log /var/lib/digdag/logs/server \
-                       --task-log /var/lib/digdag/logs/tasks
+                       --task-log /var/lib/digdag/logs/tasks \
+                       -X database.type=$DB_TYPE \
+                       -X database.user=$DB_USER \
+                       -X database.password=$DB_PASSWORD \
+                       -X database.host=$DB_HOST \
+                       -X database.port=$DB_PORT \
+                       -X database.database=$DB_NAME \
+                       -X database.maximumPoolSize=32
 
